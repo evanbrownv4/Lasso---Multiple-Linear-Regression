@@ -1,8 +1,6 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import Lasso
 
 # Define a function that allows one to quickly calculate the Root Mean Squared Error
 def RMSE(y: np.array, y_hat: np.array) -> float:
@@ -37,10 +35,7 @@ class LassoRegression:
 
 
     def fit(self, x: np.ndarray, y: np.array) -> None:
-        if len(x.shape) == 2:
-            num_samples, num_predictors = x.shape
-        else:
-            num_samples, num_predictors = len(x), 1
+        num_samples, num_predictors = x.shape
 
         self.b_hat = np.zeros(num_predictors)
         self.intercept = 0
@@ -79,8 +74,6 @@ def main():
     # Importing dataset
     df = pd.read_csv('Student_Performance.csv', sep=',', header=0)
     df.replace({"Yes": 1, "No": 0}, inplace=True)
-
-
     df = df.to_numpy()
 
     # X is our given predictors
@@ -93,7 +86,6 @@ def main():
 
     # Splitting the data into training data and test data with an 80% and 20% split
     num_rows, num_predictors = x.shape
-
     x_train = x[: int(num_rows * 0.8)]
     y_train = y[: int(num_rows * 0.8)]
     x_test = x[int(num_rows * 0.8) :]
@@ -107,10 +99,11 @@ def main():
     y_hat = lasso.predict(x_test)
     print(f"Predicted values: {y_hat[:5].round(2)}")
     print(f"Real values:      {y_test[:5]}")
-    print(f"b_hat:        {lasso.b_hat.round(2)}")
+    print(f"b_hat:            {lasso.b_hat.round(2)}")
     print(f"intercept:        {round(lasso.intercept, 2)}")
-
+    print()
     print("RMSE: ", RMSE(y_test, y_hat))
     print("R2: ", R2(y_test, y_hat))
+
 
 main()
